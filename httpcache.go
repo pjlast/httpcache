@@ -162,6 +162,7 @@ func (t *Transport) RoundTrip(req *http.Request) (resp *http.Response, err error
 		if varyMatches(cachedResp, req) {
 			// Can only use cached value if the new request doesn't Vary significantly
 			freshness := getFreshness(cachedResp.Header, req.Header)
+			fmt.Println("Freshness", freshness)
 			if freshness == fresh {
 				return cachedResp, nil
 			}
