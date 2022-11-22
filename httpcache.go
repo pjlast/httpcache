@@ -3,13 +3,13 @@
 //
 // It is only suitable for use as a 'private' cache (i.e. for a web-browser or an API-client
 // and not for a shared proxy).
-//
 package httpcache
 
 import (
 	"bufio"
 	"bytes"
 	"errors"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -152,6 +152,8 @@ func (t *Transport) RoundTrip(req *http.Request) (resp *http.Response, err error
 		transport = http.DefaultTransport
 	}
 
+	fmt.Println("Made it to here :)")
+
 	if cacheable && cachedResp != nil && err == nil {
 		if t.MarkCachedResponses {
 			cachedResp.Header.Set(XFromCache, "1")
@@ -168,6 +170,7 @@ func (t *Transport) RoundTrip(req *http.Request) (resp *http.Response, err error
 				var req2 *http.Request
 				// Add validators if caller hasn't already done so
 				etag := cachedResp.Header.Get("etag")
+				fmt.Println("ETag", etag)
 				if etag != "" && req.Header.Get("etag") == "" {
 					req2 = cloneRequest(req)
 					req2.Header.Set("if-none-match", etag)
